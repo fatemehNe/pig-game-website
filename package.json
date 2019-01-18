@@ -1,22 +1,27 @@
 {
-    "name": "my-app",
-    "scripts": {
-       "web": "nuxt web"
-    },
-    "dependencies": {
-       "axios": "^0.18.0",
-       "body-parser": "^1.18.3",
-       "bootstrap-vue": "^2.0.0-rc.11",
-       "bson-objectid": "^1.2.3",
-       "cors": "^2.8.4",
-       "express": "^4.16.3",
-       "moment": "^2.22.2",
-       "mongoose": "^5.2.5",
-       "mongoose-trigger": "^1.0.1",
-       "nuxt-edge": "^2.0.0-25523369.7c85202"
-    },
-    "devDependencies": {
-       "webpack": "^4.16.2"
-    }
- }
- 
+   "name": "my-app",
+   "scripts": {
+      "web": "nuxt web"
+   },
+   "dependencies": {
+      "axios": "^0.18.0",
+      "body-parser": "^1.18.3",
+      "bootstrap-vue": "^2.0.0-rc.11",
+      "bson-objectid": "^1.2.3",
+      "cors": "^2.8.4",
+      "es6-promise": "^4.2.5",
+      "express": "^4.16.3",
+      "moment": "^2.22.2",
+      "mongoose": "^5.2.5",
+      "mongoose-trigger": "^1.0.1",
+      "nuxt-edge": "^2.0.0-25523369.7c85202",
+      "querystring": "^0.2.0",
+      "v-calendar": "^0.9.7",
+      "vue": "2.5.21",
+      "vue-server-renderer": "2.5.21",
+      "vuex": "^3.1.0"
+   },
+   "devDependencies": {
+      "webpack": "^4.16.2"
+   }
+}

@@ -9,7 +9,7 @@ const {
     comment,
     game,
     playedGames,
-    roll
+    role
 } = require('./DB')
 
 app.use(cors())

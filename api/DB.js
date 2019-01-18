@@ -18,6 +18,7 @@ var userSchema = new Schema({
     img: { data: Buffer, contentType: String },
     Bdate : Date,
     gender : String,
+    status:{ type : Boolean , default :true},
     friends:[{
         type: Schema.Types.ObjectId,
         ref: 'user'
@@ -82,16 +83,16 @@ var commentSchema = new Schema({
     comment : String
 })
 
-var rollSchema = new Schema({
+var roleSchema = new Schema({
     userID: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     },
-    roll : String
+    role : String
 })
 
 
-var roll = mongoose.model('user', rollSchema);
+var role = mongoose.model('user', roleSchema);
 var user = mongoose.model('user', userSchema);
 var comment = mongoose.model('comment', commentSchema);
 var game = mongoose.model('game', gameSchema);
@@ -102,5 +103,5 @@ module.exports = {
     comment,
     game,
     playedGames,
-    roll
+    role
 };
