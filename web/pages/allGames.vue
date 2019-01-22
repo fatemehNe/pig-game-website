@@ -1,5 +1,6 @@
 <template>
     <div>
+        
         <b-card-group columns="">
             <div v-for="game in games" :key="game._id" :value="game._id" >
                 <b-card 
@@ -7,7 +8,7 @@
                         img-alt="Img"
                         img-top>
                     <h2 class="card-text">
-                        {{game.name}} 
+                        <nuxt-link :to="`/game/${game._id}`">{{game.name}}</nuxt-link>
                     </h2>
                     <p>score : {{game.score}}</p>
                     <p>times played : {{game.runs}}</p>
@@ -37,6 +38,7 @@ export default {
             return {
                 games
             }// get the designer
+
            
         },
 }

@@ -7,10 +7,11 @@
                         img-alt="Img"
                         img-top>
                     <h3 class="card-text">
-                        {{user.name}} {{user.fName}}
+                        <nuxt-link :to="`/user/${user._id}`">{{user.name}}</nuxt-link>
+                        
                     </h3>
                     <p>score : {{user.score}}</p>
-                    <p>num of played games: {{}}</p>
+                    <p>num of played games: {{}}</p>S
                     <p>num of designed games : {{}} </p>
                 </b-card>
             </div>

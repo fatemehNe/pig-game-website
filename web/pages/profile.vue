@@ -72,7 +72,7 @@
             </b-form>
             </div>
         </b-tab>
-        <b-tab title="my Games" >
+        <b-tab @click="mygames" title="my Games" >
             <b-carousel id="carousel1"
                 style="text-shadow: 1px 1px 2px #333;"
                 controls
@@ -85,48 +85,37 @@
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd">
                 <div v-for="game in games" :key="game._id" :value="game._id">
-                <b-carousel-slide 
-                                    img-src="http://uupload.ir/files/pmp5_screenshot_(51).png"
-                ></b-carousel-slide>
+
+                    <b-carousel-slide img-src="http://uupload.ir/files/pmp5_screenshot_(51).png">
+                        <h1 style="color: black " >{{game.name}}</h1>
+                        <h3  style="color: black ">the score : {{game.score}}</h3>
+                    </b-carousel-slide>
                 </div>
             </b-carousel>
 
         </b-tab>
-        <b-tab title="my scores" >
+        <b-tab @click="frie" title="my friends" >
             <b-card-group columns="">
-                <div v-for="user in users" :key="user._id" :value="question._id" >
+                <div v-for="user in users.friends" :key="user._id" :value="user._id" >
                     <b-card title="Title"
                             img-src="https://picsum.photos/300/300/?image=41"
                             img-alt="Img"
                             img-top>
-                        <p class="card-text">
-                            This is a wider card with supporting text below as a
-                            natural lead-in to additional content. This content
-                            is a little bit longer.
-                        </p>
-                        <div slot="footer">
-                            <small class="text-muted">Last updated 3 mins ago</small>
-                        </div>
+                            <h1 style="color: black " >{{user._id}}</h1>
+                    
                     </b-card>
                 </div>
             </b-card-group>
         </b-tab>
-        <b-tab title="my friends" >
-            <b-card-group columns="">
-                <div v-for="user in users" :key="user._id" :value="question._id" >
-                    <b-card title="Title"
-                            img-src="https://picsum.photos/300/300/?image=41"
-                            img-alt="Img"
-                            img-top>
-                        <h1 style="color: black " >
-                            {{game.name}}</h1><h3  style="color: black ">the score : {{game.score}}</h3>
-                    </b-card>
-                </div>
-            </b-card-group>
+        <b-tab title="my scores" >
+            
         </b-tab>
     </b-tabs>
 </template>
+
 <script>
+import axios from 'axios';
+
 export default {
     data () {
         return {
@@ -148,49 +137,32 @@ export default {
                 { text: 'Male', value: 'first' },
                 { text: 'Female', value: 'second' }
                 ],
+            games:{},
+            users:{}
             
         }
     },
     mounted() {
-        // this.$route.parmas.id
+
     },
     methods: {
-        async onSubmit (evt)
-        {
-            this.pickedText = "your poll has been successfuly added"
-            await axios.post('http://localhost:3001/sendpoll', {
-            user: this.form
-            })
-        }, 
-        onSlideStart (slide) {
-            this.sliding = true
-        },
-        onSlideEnd (slide) {
-            this.sliding = false
-        },
-        async asyncData() {
-            // We can return a Promise instead of calling the callback
-            let returnedusers= (await axios.post('http://localhost:3001/user',
-            {ID: this.$store.state.authUser._id})).data.data;
-            let users = {};
-
-            Array.prototype.forEach.call(returnedusers, item => {
-                users[item._id] = item;
-            })
+        async mygames(evt)
+        {   evt.preventDefault();
+            this.games= (await axios.post('http://localhost:3001/usergames',
+            {ID: this.$store.state.authUser._id})).data;
+            console.log("ga",this.games)
             
-            let hisgames= (await axios.post('http://localhost:3001/usergames',
-            {ID: this.$store.state.authUser._id})).data.data;
-            let games = {};
-
-            Array.prototype.forEach.call(hisgames, item => {
-                games[item._id] = item;
-            })
-            return {
-                users,
-                games
-            }
-           
         },
+        async frie(evt)
+        {   
+            this.users= (await axios.post('http://localhost:3001/user',
+            {ID: this.$store.state.authUser._id})).data;
+            // for (x in users.friends){
+
+            // } //get the friend name
+        },
+        
+           
     }
 }
 </script>

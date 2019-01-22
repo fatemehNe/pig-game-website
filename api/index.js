@@ -86,11 +86,24 @@ app.post('/logout', async function(req ,res ){
     
 })
 app.post('/usergames', async function(req ,res ){
-    game.findById(req.body.ID  
+    game.find({designer :req.body.ID}  
         ,function(error , data){
             if (data){
                 console.log(data)
                 res.send(data)
+                }
+            else
+                {console.log("not found")
+                res.send('')}
+    })
+    
+})
+app.post('/friendName', async function(req ,res ){
+    user.findById(req.body.ID   
+        ,function(error , data){
+            if (data){
+                console.log(data)
+                res.send(data.name)
                 }
             else
                 {console.log("not found")
