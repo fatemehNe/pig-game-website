@@ -14,54 +14,66 @@
     >
 
       <!-- Text slides with image -->
-      <b-carousel-slide caption="First slide"
-                        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-                        img-src="https://picsum.photos/1024/480/?image=42"
-      ></b-carousel-slide>
+      <b-carousel-slide 
+                        img-src="http://uupload.ir/files/pmp5_screenshot_(51).png"
+      ><h1 style="color: black " >{{best}}</h1><h3  style="color: black ">the score : {{bestGameScore}}</h3>
+      </b-carousel-slide>
 
       <!-- Slides with custom text -->
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1>Hello world!</h1>
+      <b-carousel-slide img-src="http://uupload.ir/files/pmp5_screenshot_(51).png">
+        <h1 style="color: black ">the most played game</h1><h3 style="color: black ">{{mostplayed}} </h3>
       </b-carousel-slide>
 
       <!-- Slides with image only -->
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58">
-      </b-carousel-slide>
-
-      <!-- Slides with img slot -->
-      <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
-      <b-carousel-slide>
-        <img slot="img" class="d-block img-fluid w-100" width="1024" height="480"
-             src="https://picsum.photos/1024/480/?image=55" alt="image slot">
-      </b-carousel-slide>
-
-      <!-- Slide with blank fluid image to maintain slide aspect ratio -->
-      <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          eros felis, tincidunt a tincidunt eget, convallis vel est. Ut pellentesque
-          ut lacus vel interdum.
-        </p>
+      <b-carousel-slide img-src="http://uupload.ir/files/pmp5_screenshot_(51).png">
+      <h1 style="color: black ">the best new game</h1><h3 style="color: black ">{{bestnew}} </h3>
       </b-carousel-slide>
 
     </b-carousel>
-
-    <p class="mt-4">
-      Slide #: {{ slide }}<br>
-      Sliding: {{ sliding }}
-    </p>
-
+    <b-card-group columns="">
+      <div v-for="user in users" :key="user._id" :value="user._id" >
+          <b-card >
+              <h3 class="card-text" :href="'/user'+user._id">
+                  {{user.name}} {{user.fName}}
+              </h3>
+              <p>score : {{user.score}}</p>
+              <p>num of played games: {{}}</p>
+              <p>num of designed games : {{}} </p>
+          </b-card>
+      </div>
+      <!-- <p>{{this.$store.state.authUser.role}} </p> -->
+    </b-card-group>
   </div>
 </template>
+<script src="node_modules/store/store.js"></script>
+<script src="node_modules/jquery/dist/jquery.js"></script>
+<script src="js/base.js"></script>
 
 <script>
+import axios from 'axios';
 export default {
   data () {
     return {
+      best : "the best game",
+      bestGameScore : 0,
+      mostplayed : 0,
+      bestnew : 0,
       slide: 0,
       sliding: null
     }
   },
+  async asyncData() {
+            // We can return a Promise instead of calling the callback
+            let logedins = (await axios.get('http://localhost:3001/onlines')).data;
+            let users = {};
+            Array.prototype.forEach.call(logedins, item => {
+                users[item._id] = item;
+            }) 
+
+            return {
+                users
+            }
+        },
   methods: {
     onSlideStart (slide) {
       this.sliding = true
@@ -72,4 +84,3 @@ export default {
   }
 }
 </script>
-<!-- carousel-1.vue -->

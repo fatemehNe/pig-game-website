@@ -22,6 +22,8 @@
                       placeholder="Enter password">
         </b-form-input>
       </b-form-group>
+      <div v-if="hide" style="color : red">*username or password is uncorrect</div>
+      <br>
       <b-button type="submit" variant="primary">login</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
@@ -30,29 +32,42 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-  data () {
+  data: function(){
     return {
       form: {
         username : '',
-        password : '',
-        status : false
+        password : ''
       },
-      show: true
+      show: true,
+      hide : false
     }
   },
   methods: {
     async onSubmit (evt)
-    {   form.status =true ;
-        this.pickedText = "your poll has been successfuly added"
-        await axios.post('http://localhost:3001/sendpoll', {
-          data: this.form
+    {  evt.preventDefault();
+      try {
+        await this.$store.dispatch('login', {
+          username: this.form.username,
+          password: this.form.password
         })
+        this.formUsername = ''
+        this.formPassword = ''
+        this.formError = null
+      } catch (e) {
+        this.formError = e.message
+      }
+      console.log(this.$store.state.authUser)
+      if (this.$store.state.authUser)
+        this.$router.push('/')
+      else{
+          this.hide = true
+          this.form.password = '';
+          this.form.username = '';
+        }
+        
     },
-    // {
-    //   evt.preventDefault();
-    //   alert(JSON.stringify(this.form));
-    // },
     onReset (evt) {
       evt.preventDefault();
       /* Reset our form values */
@@ -60,6 +75,7 @@ export default {
       this.form.username = '';
       /* Trick to reset/clear native browser form validation state */
       this.show = false;
+      this.hide = false;
       this.$nextTick(() => { this.show = true });
     }
   }

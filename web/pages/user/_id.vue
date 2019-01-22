@@ -83,12 +83,40 @@
                 img-height="480"
                 v-model="slide"
                 @sliding-start="onSlideStart"
-                @sliding-end="onSlideEnd">
-                <div v-for="game in games" :key="game._id" :value="game._id">
-                <b-carousel-slide 
+                @sliding-end="onSlideEnd"
+    >
+
+                <!-- Text slides with image -->
+                <b-carousel-slide caption="First slide"
+                                    text="Nulla vitae elit libero, a pharetra augue mollis interdum."
                                     img-src="http://uupload.ir/files/pmp5_screenshot_(51).png"
                 ></b-carousel-slide>
-                </div>
+
+                <!-- Slides with custom text -->
+                <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
+                    <h1>Hello world!</h1>
+                </b-carousel-slide>
+
+                <!-- Slides with image only -->
+                <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58">
+                </b-carousel-slide>
+
+                <!-- Slides with img slot -->
+                <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
+                <b-carousel-slide>
+                    <img slot="img" class="d-block img-fluid w-100" width="1024" height="480"
+                        src="https://picsum.photos/1024/480/?image=55" alt="image slot">
+                </b-carousel-slide>
+
+                <!-- Slide with blank fluid image to maintain slide aspect ratio -->
+                <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
+                    <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                    eros felis, tincidunt a tincidunt eget, convallis vel est. Ut pellentesque
+                    ut lacus vel interdum.
+                    </p>
+                </b-carousel-slide>
+
             </b-carousel>
 
         </b-tab>
@@ -118,8 +146,14 @@
                             img-src="https://picsum.photos/300/300/?image=41"
                             img-alt="Img"
                             img-top>
-                        <h1 style="color: black " >
-                            {{game.name}}</h1><h3  style="color: black ">the score : {{game.score}}</h3>
+                        <p class="card-text">
+                            This is a wider card with supporting text below as a
+                            natural lead-in to additional content. This content
+                            is a little bit longer.
+                        </p>
+                        <div slot="footer">
+                            <small class="text-muted">Last updated 3 mins ago</small>
+                        </div>
                     </b-card>
                 </div>
             </b-card-group>
@@ -148,11 +182,11 @@ export default {
                 { text: 'Male', value: 'first' },
                 { text: 'Female', value: 'second' }
                 ],
-            
+            card_text:"ghj"
         }
     },
     mounted() {
-        // this.$route.parmas.id
+        this.$route.parmas.id
     },
     methods: {
         async onSubmit (evt)
@@ -170,24 +204,15 @@ export default {
         },
         async asyncData() {
             // We can return a Promise instead of calling the callback
-            let returnedusers= (await axios.post('http://localhost:3001/user',
-            {ID: this.$store.state.authUser._id})).data.data;
+            let returnedusers= (await axios.get('http://localhost:3001/getgozine')).data;
             let users = {};
 
             Array.prototype.forEach.call(returnedusers, item => {
                 users[item._id] = item;
             })
-            
-            let hisgames= (await axios.post('http://localhost:3001/usergames',
-            {ID: this.$store.state.authUser._id})).data.data;
-            let games = {};
 
-            Array.prototype.forEach.call(hisgames, item => {
-                games[item._id] = item;
-            })
             return {
-                users,
-                games
+                users
             }
            
         },

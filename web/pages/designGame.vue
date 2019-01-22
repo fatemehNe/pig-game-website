@@ -8,6 +8,16 @@
         <b-form-checkbox-group id="checkboxes1" name="flavour1" v-model="form.clearcur" :options="clearoptions">
         </b-form-checkbox-group>
       </b-form-group>
+      <b-form-group id="exampleInputGroup8"
+                    label="enter a name for your game:"
+                    label-for="exampleInput8">
+        <b-form-input id="exampleInput8"
+                      type="text"
+                      v-model="form.name"
+                      required
+                      placeholder="Enter a name">
+        </b-form-input>
+      </b-form-group>
       <b-form-group id="exampleInputGroup3"
                     label="enter wining score:"
                     label-for="exampleInput3">
@@ -24,7 +34,6 @@
         <b-form-input id="exampleInput2"
                       type="number"
                       v-model="form.rounds"
-                      required
                       placeholder="Enter a number">
         </b-form-input>
       </b-form-group>
@@ -34,7 +43,6 @@
         <b-form-input id="exampleInput5"
                       type="number"
                       v-model="form.dicesinround"
-                      required
                       placeholder="Enter a number">
         </b-form-input>
       </b-form-group>
@@ -50,20 +58,20 @@
 
 <script>
 const ObjectID = require('bson-objectid');
+import axios from 'axios';
 
 export default {
-  data () {
+  data : function() {
     return {
       form: {
+        name : '' ,
         clearcur : [],
-        winscore : 0,
-        rounds: 0,
-        dices : 0,
-        dicesinround: 0,
-        designer:ObjectID
+        winscore : 100,
+        rounds: Infinity,
+        dices :2,
+        dicesinround: Infinity,
+        designer: this.$store.state.authUser._id
       },
-      selectedDate: new Date(2018, 0, 10),
-      selected: null,
       clearoptions: [
         { text: '1', value: 1},
         { text: '2', value: 2 },
@@ -82,25 +90,22 @@ export default {
   },
   methods: {
     async onSubmit (evt)
-    {
-        this.pickedText = "your poll has been successfuly added"
-        await axios.post('http://localhost:3001/sendpoll', {
-          user: this.form
+    {   evt.preventDefault();
+        let game ={}
+        this.pickedText = "your game has been successfuly added"
+        await axios.post('http://localhost:3001/sendgame', {
+          game: this.form
         })
     },
-    // {
-    //   evt.preventDefault();
-    //   alert(JSON.stringify(this.form));
-    // },
     onReset (evt) {
       evt.preventDefault();
       /* Reset our form values */
-      this.form.email = '';
-      this.form.name = '';
-      this.form.fname = '';
-      this.form.gender = '';
-      this.form.password = '';
-      this.form.username = '';
+      this.form.name = '',
+      this.form.clearcur = [];
+      this.form.winscore = 100;
+      this.form.rounds = Infinity;
+      this.form.dices = 2;
+      this.form.dicesinround = Infinity;
       /* Trick to reset/clear native browser form validation state */
       this.show = false;
       this.$nextTick(() => { this.show = true });
@@ -109,4 +114,3 @@ export default {
 }
 </script>
 
-<!-- b-form-1.vue -->

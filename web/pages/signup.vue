@@ -1,7 +1,7 @@
 <template>
   <div style ="margin-left:20%;margin-top:2% ;width :50% " >
 
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+    <b-form  @reset="onReset" v-if="show">
       <b-form-group id="exampleInputGroup1"
                     label="UserName:"
                     label-for="exampleInput1">
@@ -61,62 +61,61 @@
             <input type="date" name="birth" class="form-control" id="birthday" placeholder="birthday" v-model="form.bdate">
             </div>
       </div>
-      <b-button type="submit" variant="primary">Submit</b-button>
+      <!-- <date-picker v-model="form.bdate" :config="dates"></date-picker> -->
+      <b-button type="submit" variant="primary" @click="onSubmit">Submit</b-button>
       <b-button type="reset" variant="danger">Reset</b-button>
     </b-form>
-    
+  
   </div>
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      form: {
-        username : '',
-        password : '',
-        name: '',
-        fname : '',
-        email: '',
-        gender : '',
-        bdate: Date
-      },
-      selectedDate: new Date(2018, 0, 10),
-      selected: null,
-      options: [
-        { text: 'Male', value: 'first' },
-        { text: 'Female', value: 'second' }
-      ],
-      show: true
-    }
-  },
-  methods: {
-    async onSubmit (evt)
-    {
-        this.pickedText = "your poll has been successfuly added"
-        await axios.post('http://localhost:3001/sendpoll', {
-          user: this.form
-        })
+  import axios from 'axios';
+  export default {
+    data :function() {
+      return {
+        form: {
+          username : '',
+          password : '',
+          name: '',
+          fname : '',
+          email: '',
+          gender : '',
+          bdate:  Date
+        },
+        selectedDate: new Date(2018, 0, 10),
+        selected: null,
+        options: [
+          { text: 'Male', value: 'male' },
+          { text: 'Female', value: 'female' }
+        ],
+        show: true,
+        
+      }
     },
-    // {
-    //   evt.preventDefault();
-    //   alert(JSON.stringify(this.form));
-    // },
-    onReset (evt) {
-      evt.preventDefault();
-      /* Reset our form values */
-      this.form.email = '';
-      this.form.name = '';
-      this.form.fname = '';
-      this.form.gender = '';
-      this.form.password = '';
-      this.form.username = '';
-      /* Trick to reset/clear native browser form validation state */
-      this.show = false;
-      this.$nextTick(() => { this.show = true });
+    
+    methods: {
+      async onSubmit (evt)
+      {   
+          let user ={}
+          this.pickedText = "your poll has been successfuly added"
+          await axios.post('http://localhost:3001/senduser', {
+            user: this.form
+          })
+      },
+      onReset (evt) {
+        evt.preventDefault();
+        /* Reset our form values */
+        this.form.email = '';
+        this.form.name = '';
+        this.form.fname = '';
+        this.form.gender = '';
+        this.form.password = '';
+        this.form.username = '';
+        /* Trick to reset/clear native browser form validation state */
+        this.show = false;
+        this.$nextTick(() => { this.show = true });
+      }
     }
   }
-}
 </script>
-
-<!-- b-form-1.vue -->

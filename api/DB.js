@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-mongoose.connect("mongodb://127.0.0.1:17f9bfb8-90dd-44af-81bc-3d74d1e15f1f:27017/name", { useNewUrlParser: true });
+mongoose.connect("mongodb://127.0.0.1:27017/name", { useNewUrlParser: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
@@ -9,7 +9,6 @@ db.once('open', function () {
 
 var Schema = mongoose.Schema;
 var userSchema = new Schema({
-    userID:{ type: Schema.Types.ObjectId , required : true},
     username: {type : String , maxlength: 20 ,required : true},
     password :  {type : String , maxlength: 20 },
     name : String,
@@ -18,21 +17,22 @@ var userSchema = new Schema({
     img: { data: Buffer, contentType: String },
     Bdate : Date,
     gender : String,
-    status:{ type : Boolean , default :true},
+    role : {type : String , default : "user"},
+    status:{ type : Boolean , default :false},
     friends:[{
         type: Schema.Types.ObjectId,
         ref: 'user'
     }]
 })
 var gameSchema = new Schema({
-    gameID: { type: Schema.Types.ObjectId , required : true},
-    clearCurrent:[],
-    winScore: Number,
-    rounds: Number,
-    dices : Number,
-    dicesInround : Number ,
-    score : Number,
-    runs: Number,
+    name : String,
+    clearCurrent:{type :[] , default : [1,6]},
+    winScore: {type : Number , default : 100},
+    rounds: {type : Number , default : Infinity},
+    dices :{type:Number , default:2},
+    dicesInround :{type : Number , default : Infinity},
+    score : {type:Number , default:0},
+    runs:  {type:Number , default:0},
     designer: {
         type: Schema.Types.ObjectId,
         ref: 'user'
@@ -66,7 +66,6 @@ var playedGamesSchema = new Schema({
 });
 
 var commentSchema = new Schema({
-    commentID : { type: Schema.Types.ObjectId , required : true},
     gameID: {
         type: Schema.Types.ObjectId,
         ref: 'game'
@@ -83,25 +82,25 @@ var commentSchema = new Schema({
     comment : String
 })
 
-var roleSchema = new Schema({
-    userID: {
-        type: Schema.Types.ObjectId,
-        ref: 'user'
-    },
-    role : String
-})
 
-
-var role = mongoose.model('user', roleSchema);
 var user = mongoose.model('user', userSchema);
 var comment = mongoose.model('comment', commentSchema);
 var game = mongoose.model('game', gameSchema);
 var playedGames = mongoose.model('playedGames', playedGamesSchema);
 
+// let fun = async () => {
+//     let role1 = new role({ 
+//         userID: "5c4320e84f4c3822cc2906e7",
+//         role : "admin"
+//     })
+//     await role1.save()
+// }
+
+//  fun()
+  
 module.exports = {
     user,
     comment,
     game,
-    playedGames,
-    role
+    playedGames
 };
